@@ -1,138 +1,112 @@
 #include<iostream>
-#include <unistd.h>
-#include<conio.h>
 using namespace std;
-#define MAX 10
-
-class Heap
+void downadjust(int heap[],int i)
 {
-private:
-    int marks[MAX];
-    int n;
+	int n,temp,j,flag=1;
+	n=heap[0];
+	while (2*i<=n && flag==1)
+	 {
+  		j=2*i;
+  		if (j+1<=n && heap[j+1]>heap[j])
+		  {
+	  		j=j+1;
+		  }
+		if (heap[i]>heap[j])
+		  {
+		 	flag=0;
+		  }
+		  else
+		  {
+		     temp=heap[i];
+		     heap[i]=heap[j];
+		     heap[j]=temp;
+		     i=j;
+		  }
 
-public:
-    Heap();
-    void insert(int num);
-    void makeheap();
-    void heapsort();
-    void display();
-    void displayMinMax();
+	 }
 
-};
-
-Heap::Heap()
-{
-    n=0;
-    for(int i=0;i<MAX;i++)
-    {
-        marks[i]=0;
-    }
 }
 
-void Heap::insert(int num)
+void createmax(int heap[])
 {
-    if(n<MAX)
-    {
-        marks[n]=num;
-        n++;
-    }
-    else
-        cout<<"\nArray is Full!";
+  int i,n;
+  n=heap[0];
+  for (i=n/2;i>=1;i--)
+  {
+    downadjust(heap,i);
+
+  }
+}
+void display(int heap[])
+{
+ 	int i,n;
+	n=heap[0];
+	for (i=1;i<=n;i++)
+	{
+  		cout<<heap[i]<<" "<<"\n";
+	}
 }
 
-void Heap::makeheap()
+void sort(int heap[])
 {
-    //time complexity log(n)
-    for(int i=1;i<n;i++)
+    int last,temp;
+    while(heap[0]>1)
     {
-        int val=marks[i];
-        int j=i;
-        int f=(j-1)/2;
-        while(j>0&& marks[f]<val)  //creating max heap
-        {
-            marks[j]=marks[f];
-            j=f;
-            f=(j-1)/2;
-        }
-        marks[j]=val;
+        last=heap[0];
+        temp=heap[1];
+        heap[1]=heap[last];
+        heap[last]=temp;
+        heap[0]--;
+        downadjust(heap,1);
     }
-}
-
-void Heap::heapsort()
-{
-    for(int i=n-1;i>0;i--)
-    {
-        int temp=marks[i];
-        marks[i]=marks[0];
-        int k=0;
-        int j;
-        if(i==0)
-        {
-            j=-1;
-        }
-        else
-            j=1;
-        if(i>2&&marks[2]>marks[1])
-        {
-            j=2;
-        }
-        while(j>=0 && temp<marks[j])
-        {
-            marks[k]=marks[j];
-            k=j;
-            j=2*k+1;
-            if(j+1<=i-1&&marks[j]<marks[j+1])
-            {
-                j++;
-            }
-            if(j>i-1)
-            {
-                j=-1;
-            }
-        }
-        marks[k]=temp;
-    }
-}
-
-void Heap::display()
-{
-    for(int i=0;i<n;i++)
-    {
-        cout<<" "<<marks[i];
-    }
-    cout<<"\n";
-}
-
-void Heap::displayMinMax()
-{
-    cout<<"\nMaximum marks scored is: "<<marks[n-1];
-    cout<<"\nMinimum marks scored is: "<<marks[1];
 }
 
 int main()
 {
-    Heap obj;
-    int ch;
-    cout<<"\n------------------------------------------";
-    cout<<"\n----------Program for Heap----------------";
-    obj.insert(55);
-    obj.insert(48);
-    obj.insert(89);
-    obj.insert(91);
-    obj.insert(75);
-    obj.insert(63);
-    obj.insert(45);
-    obj.insert(78);
-    cout<<"\nFollowing Marks are entered: ";
-    obj.display();
-    usleep(2000);
-    obj.makeheap();
-    cout<<"\nHeapified...";
-    obj.insert(15);
-    cout<<"\nNew Element inserted...";
-    obj.heapsort();
-    //obj.display();
-    usleep(2000);
-    obj.displayMinMax();
-    return 0;
+  int i,n,heap[20];
+  cout<<"ENTER NO OF ELEMENTS: ";
+  cin>>n;
+  heap[0]=n;
+  cout<<"ENTER ELEMENTS: ";
+  for (i=1;i<=n;i++)
+  {
+	cin>>heap[i];
+  }
+  
+cout<<"The entered heap is: "<<" ";
+createmax(heap);
+display(heap);
+cout<<"The sorted heap: "<<" ";
+sort(heap);
+heap[0]=n;
+display(heap);
+cout<<"The maximum element is : "<<heap[n];
+cout<<"\nThe minimum element is : "<<heap[1];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
